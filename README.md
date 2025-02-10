@@ -53,6 +53,9 @@ Make sure you have these tools and libraries installed on your system:
 
 ## Usage 🐱‍💻
 
+0. **IMPORTANT** Change the BASE_DIR in the code!!!
+   Line (15) or search for "# Direction Confs."
+
 1. **Start the Application**:
    ```bash
    python app.py
