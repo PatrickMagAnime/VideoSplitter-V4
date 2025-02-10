@@ -1,0 +1,13 @@
+{
+    "segment_duration": "60",
+    "codec": "copy",
+    "fps": "",
+    "resolution": "",
+    "audio_codec": "copy",
+    "bitrate": "",
+    "extract_audio": false,
+    "audio_format": "mp3",
+    "keep_original_name": true,
+    "custom_name": "",
+    "output_format": "original"
+}

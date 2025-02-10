@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PMA's Video Splitter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PMA's Video Splitter</h1>
+            <div id="status-bar">{{ status }}</div>
+        </header>
+
+        <div class="file-browser">
+            <div class="column">
+                <h2>Input Folder</h2>
+                <div class="file-list" id="input-files"
+                     ondragover="event.preventDefault()"
+                     ondrop="handleDrop(event, 'input')">
+                    {% for file in input_files %}
+                    <div class="file-item" ondblclick="previewVideo('{{ file }}')">{{ file }}</div>
+                    {% endfor %}
+                </div>
+                <button onclick="browseFolder('input')">Browse</button>
+            </div>
+
+            <div class="column">
+                <h2>Output Folder</h2>
+                <div class="file-list" id="output-files"
+                     ondragover="event.preventDefault()"
+                     ondrop="handleDrop(event, 'output')">
+                    {% for file in output_files %}
+                    <div class="file-item">{{ file }}</div>
+                    {% endfor %}
+                </div>
+                <button onclick="browseFolder('output')">Browse</button>
+            </div>
+        </div>
+
+        <div class="settings">
+            <div class="settings-group">
+                <h3>Video Einstellungen</h3>
+                <div class="form-row">
+                    <label>Segment Dauer (Sekunden):</label>
+                    <input type="number" id="segment-duration" value="59">
+                </div>
+                
+                <div class="form-row">
+                    <label>Codec:</label>
+                    <select id="codec">
+                        <option value="copy">Original</option>
+                        <option value="libx264">H.264</option>
+                        <option value="libx265">H.265</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>FPS:</label>
+                    <select id="fps">
+                        <option value="">Original</option>
+                        <option value="24">24</option>
+                        <option value="30">30</option>
+                        <option value="60">60</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Auflösung:</label>
+                    <select id="resolution">
+                        <option value="">Original</option>
+                        <option value="1920x1080">1080p</option>
+                        <option value="1280x720">720p</option>
+                        <option value="640x480">480p</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>Audio Einstellungen</h3>
+                <div class="form-row">
+                    <label>Audio Codec:</label>
+                    <select id="audio-codec">
+                        <option value="copy">Original</option>
+                        <option value="aac">AAC</option>
+                        <option value="mp3">MP3</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Bitrate:</label>
+                    <select id="bitrate">
+                        <option value="">Auto</option>
+                        <option value="128k">128k</option>
+                        <option value="192k">192k</option>
+                        <option value="256k">256k</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>
+                        <input type="checkbox" id="extract-audio">
+                        Audio extrahieren
+                    </label>
+                    <select id="audio-format" disabled>
+                        <option value="mp3">MP3</option>
+                        <option value="wav">WAV</option>
+                        <option value="flac">FLAC</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>Ausgabe Einstellungen</h3>
+                <div class="form-row">
+                    <label>
+                        <input type="checkbox" id="keep-name" checked>
+                        Originalname behalten
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <label>Benutzerdefinierter Name:</label>
+                    <input type="text" id="custom-name" enabled>
+                </div>
+
+                <div class="form-row">
+                    <label>Ausgabeformat:</label>
+                    <select id="output-format">
+                        <option value="original">Original</option>
+                        <option value="mp4">MP4</option>
+                        <option value="mkv">MKV</option>
+                        <option value="avi">AVI</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-primary" onclick="startProcessing()">Start</button>
+            <button onclick="saveSettings()">Einstellungen speichern</button>
+            <button onclick="refreshFiles()">Aktualisieren</button>
+        </div>
+
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+            <div id="progress-text">0%</div>
+        </div>
+
+        <div id="preview-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closePreview()">&times;</span>
+                <video id="preview-player" controls></video>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="{{ url_for('static', filename='images/profile-picture.jpeg') }}" alt="PatrickMagAnime" class="profile-picture">
+            <span>Made by PatrickMagAnime</span>
+            <div class="footer-icons">
+                <a href="https://github.com/PatrickMagAnime" target="_blank" class="icon-link">
+                    <img src="{{ url_for('static', filename='images/github-icon.png') }}" alt="GitHub" class="icon">
+                </a>
+                <a href="https://www.youtube.com/@patrickmaganime?sub_confirmation=1" target="_blank" class="icon-link">
+                    <img src="{{ url_for('static', filename='images/youtube-icon.png') }}" alt="YouTube" class="icon">
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
